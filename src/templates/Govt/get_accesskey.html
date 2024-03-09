@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./govt_styles.css" />
+  </head>
+  <body>
+    <div class="retreive-footage">
+      <h3 class="dashboard-options">
+        <img class="option" src="../assets/option.png" alt="/" /> Get Access Key
+      </h3>
+      <form class="retreive-form">
+        <p
+          style="
+            margin-top: 4px;
+            font-size: small;
+            font-weight: 500;
+            color: red;
+          "
+        >
+          Note: Please enter pvt organization email, and also specify purpose.
+        </p>
+        <label for="email"
+          >Email:
+          <input
+            type="text"
+            name="email"
+            id="email"
+            placeholder="ex: pvtfirm23@gmail.com"
+            required
+          />
+        </label>
+        <label for="accessKey"
+          >Purpose:
+          <input
+            type="text"
+            name="accessKey"
+            id="accessKey"
+            placeholder="ex: 19SDOE308"
+            required
+          />
+        </label>
+        <button class="retreive-btn">Retreive</button>
+      </form>
+    </div>
+  </body>
+</html>
