@@ -10,11 +10,13 @@ contract CCTVFootage {
   string[] _pname;
   string[] _pemail;
   string[] _ppassword;
+  uint[] _pstatuses;
 
   uint[] _gids;
   string[] _gname;
   string[] _gemail;
   string[] _gpassword;
+  uint[] _gstatuses;
 
   mapping(string=>bool) _registeredPrivate;
   mapping(string=>bool) _registeredGovt;
@@ -42,12 +44,13 @@ contract CCTVFootage {
     _pemail.push(email);
     _ppassword.push(password);
     _pids.push(pid);
+    _pstatuses.push(0);
 
     _registeredPrivate[email]=true;
   } 
 
-  function viewPrivateOfficial() public view returns(uint[] memory,string[] memory,string[] memory,string[] memory){
-    return(_pids,_pname,_pemail,_ppassword);
+  function viewPrivateOfficial() public view returns(uint[] memory,string[] memory,string[] memory,string[] memory,uint[] memory){
+    return(_pids,_pname,_pemail,_ppassword,_pstatuses);
   }
 
   function addGovernmentOfficial(string memory name,string memory email,string memory password) public {
@@ -58,12 +61,31 @@ contract CCTVFootage {
     _gemail.push(email);
     _gpassword.push(password);
     _gids.push(pid);
+    _gstatuses.push(0);
 
     _registeredGovt[email]=true;
   }
 
-  function viewGovernmentOfficial() public view returns(uint[] memory,string[] memory,string[] memory,string[] memory){
-    return(_gids,_gname,_gemail,_gpassword);
+  function viewGovernmentOfficial() public view returns(uint[] memory,string[] memory,string[] memory,string[] memory,uint[] memory){
+    return(_gids,_gname,_gemail,_gpassword,_gstatuses);
+  }
+
+  function updateGovernmentOfficial(uint gid1,uint status1) public {
+    uint i;
+    for(i=0;i<_gids.length;i++){
+      if(_gids[i]==gid1){
+        _gstatuses[i]=status1;
+      }
+    }
+  }
+
+  function updatePrivateOfficial(uint pid1,uint status2) public {
+    uint i;
+    for(i=0;i<_pids.length;i++){
+      if(_pids[i]==pid1){
+        _pstatuses[i]=status2;
+      }
+    }
   }
 
 }
