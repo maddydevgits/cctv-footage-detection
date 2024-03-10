@@ -6,6 +6,17 @@ import json
 from datetime import datetime
 
 from web3 import Web3, HTTPProvider
+from moviepy.editor import VideoFileClip
+
+def convert_avi_to_mp4(input_path, output_path):
+    # Load the AVI video clip
+    video_clip = VideoFileClip(input_path)
+
+    # Export the video clip to MP4 format
+    video_clip.write_videofile(output_path, codec="libx264", audio_codec="aac")
+
+    # Close the video clip
+    video_clip.close()
 
 def connectWithBlockchain(acc):
     web3 = Web3(HTTPProvider('http://127.0.0.1:7545'))
@@ -33,7 +44,7 @@ def record_and_upload_video():
 
     # Record video for 180 seconds
     start_time = time.time()
-    while time.time() - start_time < 180:
+    while time.time() - start_time < 30: # 180 Seconds for 3 Minutes
         ret, frame = capture.read()
         if ret:
             out.write(frame)
@@ -43,11 +54,16 @@ def record_and_upload_video():
     # Release the video capture
     capture.release()
     out.release()
+    output_file_path = "output_video.mp4"
+
+    # Convert AVI to OGG
+    convert_avi_to_mp4(output_file, output_file_path)
 
     # Upload the video to IPFS
-    api = ipfsapi.Client('127.0.0.1',4001)
-    res = api.add(output_file)
+    api = ipfsapi.Client('127.0.0.1',5001)
+    res = api.add(output_file_path)
     video_hash = res['Hash']
+    print(video_hash)
 
     # Get current date and time
     now = datetime.now()
@@ -57,8 +73,8 @@ def record_and_upload_video():
     # Connect with blockchain and add video hash
     contract, web3 = connectWithBlockchain(0)
     print(date,time_str)
-    tx_hash = contract.functions.addVideoHash("Make Skilled", date, time_str, video_hash).transact()
-    print("Transaction Hash:", web3.toHex(tx_hash))
+    tx_hash = contract.functions.addVideoHash(1, date, time_str, video_hash).transact()
+    web3.eth.waitForTransactionReceipt(tx_hash)
 
     # Delete the local video file
     os.remove(output_file)
